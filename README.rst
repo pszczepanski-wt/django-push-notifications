@@ -102,7 +102,7 @@ For WNS, you need both the ``WNS_PACKAGE_SECURITY_KEY`` and the ``WNS_SECRET_KEY
 
 - ``USER_MODEL``: Your user model of choice. Eg. ``myapp.User``. Defaults to ``settings.AUTH_USER_MODEL``.
 - ``UPDATE_ON_DUPLICATE_REG_ID``: Transform create of an existing Device (based on registration id) into a update. See below `Update of device with duplicate registration ID`_ for more details.
-- ``UNIQUE_REG_ID``: Forces the ``registration_id`` field on all device models to be unique.
+- ``UNIQUE_REG_ID``: Forces the ``registration_id`` field on all device models to be unique. NOTE: There is a current MYSQL bug that prevents the use of this setting. See: https://code.djangoproject.com/ticket/2495 and https://docs.djangoproject.com/en/2.2/ref/databases/#textfield-limitations
 
 **APNS settings**
 
@@ -244,7 +244,7 @@ When using FCM, ``django-push-notifications`` will automatically use the `notifi
 	# Send a notification message
 	fcm_device.send_message("This is a message")
 
-	# Send a notification message with additionnal payload
+	# Send a notification message with additional payload
 	fcm_device.send_message("This is a enriched message", extra={"title": "Notification title", "icon": "icon_ressource"})
 
 	# Send a notification message with additionnal payload (alternative syntax)
@@ -343,9 +343,9 @@ Routes can be added one of two ways:
 Update of device with duplicate registration ID
 -----------------------------------------------
 
-The DRF viewset enforce the uniqueness of the registration ID. In same use case it
-may cause issue: If an already registered mobile change its user and it will
-fail to register because the registration ID already exist.
+The DRF viewset enforces the uniqueness of the registration ID. In some use cases it
+may cause issues: If an already registered mobile device application changes its user and attempts to re-register, it will
+fail to register because the registration ID already exists.
 
 When option ``UPDATE_ON_DUPLICATE_REG_ID`` is set to True, then any creation of
 device with an already existing registration ID will be transformed into an update.
